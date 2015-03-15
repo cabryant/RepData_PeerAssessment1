@@ -1,12 +1,8 @@
----
-title: "Reproducible Research: Peer Assessment 1"
-output: 
-  html_document:
-    keep_md: true
----
+# Reproducible Research: Peer Assessment 1
 
 0. Set Up Global Reporting Options
-```{r}
+
+```r
 # only use scientific notation for very large numbers
 options(scipen = 10)
 ```
@@ -14,7 +10,8 @@ options(scipen = 10)
 ## Loading and preprocessing the data
 
 1. Load the data
-```{r}
+
+```r
 unzip("activity.zip")
 
 # Interpret the second column as dates
@@ -22,7 +19,8 @@ activity <- read.csv("activity.csv", colClasses = c(NA, "Date", NA))
 ```
 
 2. Process/transform the data into a format suitable for analysis
-```{r}
+
+```r
 # clean cases
 cleanActivity <- activity[complete.cases(activity),]
 ```
@@ -32,32 +30,38 @@ cleanActivity <- activity[complete.cases(activity),]
 Note: for this section, we are ignoring missing values in the dataset
 
 1. Calculate the total number of steps taken per day
-```{r}
+
+```r
 # aggregate steps by date, taking the sum
 stepsPerDay <- aggregate(steps ~ date, cleanActivity, sum)
 ```
 
 2. Histogram of the total number of steps taken each day
-```{r, fig.height=4}
+
+```r
 hist(stepsPerDay$steps, 
      main="Distribution of the total number of steps taken each day",
      xlab="steps taken each day",
      col="lightskyblue3")
 ```
 
+![](PA1_template_files/figure-html/unnamed-chunk-5-1.png) 
+
 3. Calculate and report the mean and median of the total number of steps taken per day
-```{r}
+
+```r
 meanStepsPerDay <- mean(stepsPerDay$steps)
 medianStepsPerDay <- median(stepsPerDay$steps)
 ```
-* __Mean Steps Per Day__:   `r meanStepsPerDay`
+* __Mean Steps Per Day__:   10766.1886792
 
-* __Median Steps Per Day__: `r medianStepsPerDay`
+* __Median Steps Per Day__: 10765
 
 ## What is the average daily activity pattern?
 
 1. Time series plot of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all days (y-axis)
-```{r, fig.height=4}
+
+```r
 # aggregate steps by interval, taking the mean
 meanStepsPerInterval <- aggregate(steps ~ interval, cleanActivity, mean)
 
@@ -69,11 +73,14 @@ plot(meanStepsPerInterval,
      col="lightskyblue3")
 ```
 
+![](PA1_template_files/figure-html/unnamed-chunk-7-1.png) 
+
 2. Which 5-minute interval, on average across all the days in the dataset, contains the maximum number of steps?
-```{r}
+
+```r
 intervalWithMaxAverageSteps <- meanStepsPerInterval[which.max(meanStepsPerInterval$steps),]$interval
 ```
-* __5-minute interval with maximum number of steps, on average across all days__:   `r intervalWithMaxAverageSteps`
+* __5-minute interval with maximum number of steps, on average across all days__:   835
 
 ## Inputing missing values
 
@@ -81,10 +88,11 @@ Note: There are a number of days/intervals where there are missing values (coded
 
 1. The total number of missing values in the dataset (i.e. the total number of rows with NAs)
 
-```{r}
+
+```r
 numRowsNa <- nrow(activity[!complete.cases(activity),])
 ```
-* __Number of rows with missing values__:   `r numRowsNa`
+* __Number of rows with missing values__:   2304
 
 2. Identify a strategy for filling in all of the missing values in the dataset:
 
@@ -92,7 +100,8 @@ numRowsNa <- nrow(activity[!complete.cases(activity),])
 
 3. Create a new dataset that is equal to the original dataset but with the missing data filled in, using the above strategy.
 
-```{r}
+
+```r
 adjustedActivity <- activity
 nrowsOfActivity <- nrow(activity)
 for (i in 1:nrowsOfActivity) {
@@ -104,8 +113,8 @@ for (i in 1:nrowsOfActivity) {
 
 4.1 Histogram of the adjusted total number of steps taken each day.
 
-```{r, fig.height=4}
 
+```r
 # aggregate steps by date, taking the sum
 adjustedStepsPerDay <- aggregate(steps ~ date, adjustedActivity, sum)
 
@@ -115,14 +124,17 @@ hist(adjustedStepsPerDay$steps,
      col="orange2")
 ```
 
+![](PA1_template_files/figure-html/unnamed-chunk-11-1.png) 
+
 4.2 Calculate and report the mean and median total number of steps taken per day (adjusted).
-```{r}
+
+```r
 adjustedMeanStepsPerDay <- mean(adjustedStepsPerDay$steps)
 adjustedMedianStepsPerDay <- median(adjustedStepsPerDay$steps)
 ```
-* __Adjusted Mean Steps Per Day__:   `r adjustedMeanStepsPerDay`
+* __Adjusted Mean Steps Per Day__:   10766.1886792
 
-* __Adjusted Median Steps Per Day__: `r adjustedMedianStepsPerDay`
+* __Adjusted Median Steps Per Day__: 10766.1886792
 
 4.3 Do these values differ from the estimates from the first part of the assignment? What is the impact of inputing missing data on the estimates of the total daily number of steps?
 
