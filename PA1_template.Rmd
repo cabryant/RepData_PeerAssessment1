@@ -129,3 +129,28 @@ adjustedMedianStepsPerDay <- median(adjustedStepsPerDay$steps)
 _The mean matches the estimate from the first part of the assignment, but the median has shifted.  The mean remains the same because our replacement strategy is to use the mean for existing values for each interval as the replacement for unkonwn values, which maintains the mean for that interval (averaging in a value equal to the current average maintains the average).  However, the median shifts as a result of replacing unknown values (as the median is the 50th percentile of all values, adding average values per interval where they did not exist, moves the median to equal the mean for the data set)._
 
 ## Are there differences in activity patterns between weekdays and weekends?
+
+Note: using the dataset with the filled-in missing values for this part
+
+1. Create a new factor variable in the dataset with two levels – “weekday” and “weekend” indicating whether a given date is a weekday or weekend day.
+
+```{r}
+# Adds the daytype factor variable with levels "weekend" or "weekday"
+# based on the day of week of each entry in the dataset
+weekendDays <- c("Saturday", "Sunday")
+adjustedActivity$daytype <- as.factor(ifelse(is.element(weekdays(adjustedActivity$date), weekendDays), "weekend", "weekday"))
+```
+
+2. A panel plot containing a time series plot (i.e. type = "l") of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all weekday days or weekend days (y-axis)..
+
+```{r}
+# aggregate steps by interval and day type, taking the mean
+meanStepsPerIntervalByDayType <- aggregate(steps ~ interval + daytype, adjustedActivity, mean)
+
+# panel plot by daytime
+library("lattice")
+xyplot(steps~interval|daytype,
+       data=meanStepsPerIntervalByDayType,
+       type="l",
+       layout=c(1,2))
+```
