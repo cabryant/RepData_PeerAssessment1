@@ -9,7 +9,7 @@ options(scipen = 10)
 
 ## Loading and preprocessing the data
 
-1. Load the data
+1. Unzip and Load the data
 
 ```r
 unzip("activity.zip")
@@ -18,7 +18,7 @@ unzip("activity.zip")
 activity <- read.csv("activity.csv", colClasses = c(NA, "Date", NA))
 ```
 
-2. Process/transform the data into a format suitable for analysis
+2. Create a copy of the activity data that removes incomplete rows
 
 ```r
 # clean cases
@@ -27,12 +27,11 @@ cleanActivity <- activity[complete.cases(activity),]
 
 ## What is mean total number of steps taken per day?
 
-Note: for this section, we are ignoring missing values in the dataset
-
 1. Calculate the total number of steps taken per day
 
 ```r
 # aggregate steps by date, taking the sum
+# note: we ignore missing values for this section
 stepsPerDay <- aggregate(steps ~ date, cleanActivity, sum)
 ```
 
@@ -53,9 +52,9 @@ hist(stepsPerDay$steps,
 meanStepsPerDay <- mean(stepsPerDay$steps)
 medianStepsPerDay <- median(stepsPerDay$steps)
 ```
-* __Mean Steps Per Day__:   10766.1886792
+__Mean Steps Per Day__:   10766.1886792
 
-* __Median Steps Per Day__: 10765
+__Median Steps Per Day__: 10765
 
 ## What is the average daily activity pattern?
 
@@ -80,11 +79,9 @@ plot(meanStepsPerInterval,
 ```r
 intervalWithMaxAverageSteps <- meanStepsPerInterval[which.max(meanStepsPerInterval$steps),]$interval
 ```
-* __5-minute interval with maximum number of steps, on average across all days__:   835
+__5-minute interval with maximum number of steps, on average across all days__:   835
 
 ## Inputing missing values
-
-Note: There are a number of days/intervals where there are missing values (coded as NA). The presence of missing days may introduce bias into some calculations or summaries of the data.
 
 1. The total number of missing values in the dataset (i.e. the total number of rows with NAs)
 
@@ -92,11 +89,11 @@ Note: There are a number of days/intervals where there are missing values (coded
 ```r
 numRowsNa <- nrow(activity[!complete.cases(activity),])
 ```
-* __Number of rows with missing values__:   2304
+__Number of rows with missing values__:   2304
 
-2. Identify a strategy for filling in all of the missing values in the dataset:
+2. Strategy for filling in all of the missing values in the dataset:
 
-* __If the step value is missing, use the mean step value for the corresponding 5-minute interval, averaged across all days__
+__If the step value is missing, use the mean step value for the corresponding 5-minute interval, averaged across all days__
 
 3. Create a new dataset that is equal to the original dataset but with the missing data filled in, using the above strategy.
 
@@ -111,7 +108,7 @@ for (i in 1:nrowsOfActivity) {
 }
 ```
 
-4.1 Histogram of the adjusted total number of steps taken each day.
+4.1 Histogram of the adjusted total number of steps taken each day (after missing values are inputed).
 
 
 ```r
@@ -132,9 +129,9 @@ hist(adjustedStepsPerDay$steps,
 adjustedMeanStepsPerDay <- mean(adjustedStepsPerDay$steps)
 adjustedMedianStepsPerDay <- median(adjustedStepsPerDay$steps)
 ```
-* __Adjusted Mean Steps Per Day__:   10766.1886792
+__Adjusted Mean Steps Per Day__:   10766.1886792
 
-* __Adjusted Median Steps Per Day__: 10766.1886792
+__Adjusted Median Steps Per Day__: 10766.1886792
 
 4.3 Do these values differ from the estimates from the first part of the assignment? What is the impact of inputing missing data on the estimates of the total daily number of steps?
 

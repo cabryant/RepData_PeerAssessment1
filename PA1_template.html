@@ -72,25 +72,25 @@ options(scipen = 10)</code></pre>
 <div id="loading-and-preprocessing-the-data" class="section level2">
 <h2>Loading and preprocessing the data</h2>
 <ol style="list-style-type: decimal">
-<li>Load the data</li>
+<li>Unzip and Load the data</li>
 </ol>
 <pre class="r"><code>unzip(&quot;activity.zip&quot;)
 
 # Interpret the second column as dates
 activity &lt;- read.csv(&quot;activity.csv&quot;, colClasses = c(NA, &quot;Date&quot;, NA))</code></pre>
 <ol start="2" style="list-style-type: decimal">
-<li>Process/transform the data into a format suitable for analysis</li>
+<li>Create a copy of the activity data that removes incomplete rows</li>
 </ol>
 <pre class="r"><code># clean cases
 cleanActivity &lt;- activity[complete.cases(activity),]</code></pre>
 </div>
 <div id="what-is-mean-total-number-of-steps-taken-per-day" class="section level2">
 <h2>What is mean total number of steps taken per day?</h2>
-<p>Note: for this section, we are ignoring missing values in the dataset</p>
 <ol style="list-style-type: decimal">
 <li>Calculate the total number of steps taken per day</li>
 </ol>
 <pre class="r"><code># aggregate steps by date, taking the sum
+# note: we ignore missing values for this section
 stepsPerDay &lt;- aggregate(steps ~ date, cleanActivity, sum)</code></pre>
 <ol start="2" style="list-style-type: decimal">
 <li>Histogram of the total number of steps taken each day</li>
@@ -105,10 +105,8 @@ stepsPerDay &lt;- aggregate(steps ~ date, cleanActivity, sum)</code></pre>
 </ol>
 <pre class="r"><code>meanStepsPerDay &lt;- mean(stepsPerDay$steps)
 medianStepsPerDay &lt;- median(stepsPerDay$steps)</code></pre>
-<ul>
-<li><p><strong>Mean Steps Per Day</strong>: 10766.1886792</p></li>
-<li><p><strong>Median Steps Per Day</strong>: 10765</p></li>
-</ul>
+<p><strong>Mean Steps Per Day</strong>: 10766.1886792</p>
+<p><strong>Median Steps Per Day</strong>: 10765</p>
 </div>
 <div id="what-is-the-average-daily-activity-pattern" class="section level2">
 <h2>What is the average daily activity pattern?</h2>
@@ -129,26 +127,19 @@ plot(meanStepsPerInterval,
 <li>Which 5-minute interval, on average across all the days in the dataset, contains the maximum number of steps?</li>
 </ol>
 <pre class="r"><code>intervalWithMaxAverageSteps &lt;- meanStepsPerInterval[which.max(meanStepsPerInterval$steps),]$interval</code></pre>
-<ul>
-<li><strong>5-minute interval with maximum number of steps, on average across all days</strong>: 835</li>
-</ul>
+<p><strong>5-minute interval with maximum number of steps, on average across all days</strong>: 835</p>
 </div>
 <div id="inputing-missing-values" class="section level2">
 <h2>Inputing missing values</h2>
-<p>Note: There are a number of days/intervals where there are missing values (coded as NA). The presence of missing days may introduce bias into some calculations or summaries of the data.</p>
 <ol style="list-style-type: decimal">
 <li>The total number of missing values in the dataset (i.e. the total number of rows with NAs)</li>
 </ol>
 <pre class="r"><code>numRowsNa &lt;- nrow(activity[!complete.cases(activity),])</code></pre>
-<ul>
-<li><strong>Number of rows with missing values</strong>: 2304</li>
-</ul>
+<p><strong>Number of rows with missing values</strong>: 2304</p>
 <ol start="2" style="list-style-type: decimal">
-<li>Identify a strategy for filling in all of the missing values in the dataset:</li>
+<li>Strategy for filling in all of the missing values in the dataset:</li>
 </ol>
-<ul>
-<li><strong>If the step value is missing, use the mean step value for the corresponding 5-minute interval, averaged across all days</strong></li>
-</ul>
+<p><strong>If the step value is missing, use the mean step value for the corresponding 5-minute interval, averaged across all days</strong></p>
 <ol start="3" style="list-style-type: decimal">
 <li>Create a new dataset that is equal to the original dataset but with the missing data filled in, using the above strategy.</li>
 </ol>
@@ -159,7 +150,7 @@ for (i in 1:nrowsOfActivity) {
     adjustedActivity[i,&quot;steps&quot;] &lt;- meanStepsPerInterval[meanStepsPerInterval$interval==activity[i, &quot;interval&quot;],&quot;steps&quot;]
   }
 }</code></pre>
-<p>4.1 Histogram of the adjusted total number of steps taken each day.</p>
+<p>4.1 Histogram of the adjusted total number of steps taken each day (after missing values are inputed).</p>
 <pre class="r"><code># aggregate steps by date, taking the sum
 adjustedStepsPerDay &lt;- aggregate(steps ~ date, adjustedActivity, sum)
 
@@ -171,10 +162,8 @@ hist(adjustedStepsPerDay$steps,
 <p>4.2 Calculate and report the mean and median total number of steps taken per day (adjusted).</p>
 <pre class="r"><code>adjustedMeanStepsPerDay &lt;- mean(adjustedStepsPerDay$steps)
 adjustedMedianStepsPerDay &lt;- median(adjustedStepsPerDay$steps)</code></pre>
-<ul>
-<li><p><strong>Adjusted Mean Steps Per Day</strong>: 10766.1886792</p></li>
-<li><p><strong>Adjusted Median Steps Per Day</strong>: 10766.1886792</p></li>
-</ul>
+<p><strong>Adjusted Mean Steps Per Day</strong>: 10766.1886792</p>
+<p><strong>Adjusted Median Steps Per Day</strong>: 10766.1886792</p>
 <p>4.3 Do these values differ from the estimates from the first part of the assignment? What is the impact of inputing missing data on the estimates of the total daily number of steps?</p>
 <p><em>The mean matches the estimate from the first part of the assignment, but the median has shifted. The mean remains the same because our replacement strategy is to use the mean for existing values for each interval as the replacement for unkonwn values, which maintains the mean for that interval (averaging in a value equal to the current average maintains the average). However, the median shifts as a result of replacing unknown values (as the median is the 50th percentile of all values, adding average values per interval where they did not exist, moves the median to equal the mean for the data set).</em></p>
 </div>
