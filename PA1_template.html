@@ -72,7 +72,7 @@ options(scipen = 10)</code></pre>
 <div id="loading-and-preprocessing-the-data" class="section level2">
 <h2>Loading and preprocessing the data</h2>
 <ol style="list-style-type: decimal">
-<li>Unzip and Load the data</li>
+<li>Unzip and Load the activity data</li>
 </ol>
 <pre class="r"><code>unzip(&quot;activity.zip&quot;)
 
@@ -132,7 +132,7 @@ plot(meanStepsPerInterval,
 <div id="inputing-missing-values" class="section level2">
 <h2>Inputing missing values</h2>
 <ol style="list-style-type: decimal">
-<li>The total number of missing values in the dataset (i.e. the total number of rows with NAs)</li>
+<li>Find the total number of missing values in the dataset (i.e. the total number of rows with NAs)</li>
 </ol>
 <pre class="r"><code>numRowsNa &lt;- nrow(activity[!complete.cases(activity),])</code></pre>
 <p><strong>Number of rows with missing values</strong>: 2304</p>
@@ -165,7 +165,7 @@ adjustedMedianStepsPerDay &lt;- median(adjustedStepsPerDay$steps)</code></pre>
 <p><strong>Adjusted Mean Steps Per Day</strong>: 10766.1886792</p>
 <p><strong>Adjusted Median Steps Per Day</strong>: 10766.1886792</p>
 <p>4.3 Do these values differ from the estimates from the first part of the assignment? What is the impact of inputing missing data on the estimates of the total daily number of steps?</p>
-<p><em>The mean matches the estimate from the first part of the assignment, but the median has shifted. The mean remains the same because our replacement strategy is to use the mean for existing values for each interval as the replacement for unkonwn values, which maintains the mean for that interval (averaging in a value equal to the current average maintains the average). However, the median shifts as a result of replacing unknown values (as the median is the 50th percentile of all values, adding average values per interval where they did not exist, moves the median to equal the mean for the data set).</em></p>
+<p><em>The mean matches the estimate from the first part of the assignment, but the median has shifted. The mean remains the same because our replacement strategy is to use the mean for existing values for each interval as the replacement for unknown values, which maintains the mean for that interval (averaging in a value equal to the current average maintains the average). However, the median shifts as a result of replacing unknown values (as the median is the 50th percentile of all values, adding average values per interval where they did not exist, moves the median to equal the mean for the data set).</em></p>
 </div>
 <div id="are-there-differences-in-activity-patterns-between-weekdays-and-weekends" class="section level2">
 <h2>Are there differences in activity patterns between weekdays and weekends?</h2>

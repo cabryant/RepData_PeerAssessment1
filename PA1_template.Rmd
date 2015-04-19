@@ -13,7 +13,7 @@ options(scipen = 10)
 
 ## Loading and preprocessing the data
 
-1. Unzip and Load the data
+1. Unzip and Load the activity data
 ```{r}
 unzip("activity.zip")
 
@@ -76,7 +76,7 @@ __5-minute interval with maximum number of steps, on average across all days__: 
 
 ## Inputing missing values
 
-1. The total number of missing values in the dataset (i.e. the total number of rows with NAs)
+1. Find the total number of missing values in the dataset (i.e. the total number of rows with NAs)
 
 ```{r}
 numRowsNa <- nrow(activity[!complete.cases(activity),])
@@ -123,7 +123,7 @@ __Adjusted Median Steps Per Day__: `r adjustedMedianStepsPerDay`
 
 4.3 Do these values differ from the estimates from the first part of the assignment? What is the impact of inputing missing data on the estimates of the total daily number of steps?
 
-_The mean matches the estimate from the first part of the assignment, but the median has shifted.  The mean remains the same because our replacement strategy is to use the mean for existing values for each interval as the replacement for unkonwn values, which maintains the mean for that interval (averaging in a value equal to the current average maintains the average).  However, the median shifts as a result of replacing unknown values (as the median is the 50th percentile of all values, adding average values per interval where they did not exist, moves the median to equal the mean for the data set)._
+_The mean matches the estimate from the first part of the assignment, but the median has shifted.  The mean remains the same because our replacement strategy is to use the mean for existing values for each interval as the replacement for unknown values, which maintains the mean for that interval (averaging in a value equal to the current average maintains the average).  However, the median shifts as a result of replacing unknown values (as the median is the 50th percentile of all values, adding average values per interval where they did not exist, moves the median to equal the mean for the data set)._
 
 ## Are there differences in activity patterns between weekdays and weekends?
 
